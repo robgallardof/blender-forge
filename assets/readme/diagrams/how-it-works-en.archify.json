@@ -1,0 +1,120 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "How blender-forge drives Blender",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/robgallardof/blender-forge.git",
+      "revision": "50e17dc5df50de0f574b11c62d38997fd0a8e7ca"
+    },
+    "output": ".archify/how-it-works-en-20261027-174704/diagram.html"
+  },
+  "lanes": [
+    {
+      "id": "agent",
+      "label": "Your agent"
+    },
+    {
+      "id": "local",
+      "label": "Your machine"
+    }
+  ],
+  "mainPath": [
+    "step0",
+    "step1",
+    "step2",
+    "step3",
+    "step4"
+  ],
+  "nodes": [
+    {
+      "id": "step0",
+      "lane": "agent",
+      "col": 0,
+      "type": "frontend",
+      "label": "Ask for a scene",
+      "sublabel": "build_scene or tools",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/server.py"
+        }
+      ]
+    },
+    {
+      "id": "step1",
+      "lane": "local",
+      "col": 1,
+      "type": "backend",
+      "label": "Validate",
+      "sublabel": "spec checked first",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/spec.py"
+        }
+      ]
+    },
+    {
+      "id": "step2",
+      "lane": "local",
+      "col": 2,
+      "type": "backend",
+      "label": "Signed bridge",
+      "sublabel": "HMAC, 127.0.0.1 only",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/addon/bridge.py"
+        }
+      ]
+    },
+    {
+      "id": "step3",
+      "lane": "local",
+      "col": 3,
+      "type": "backend",
+      "label": "Blender builds it",
+      "sublabel": "main thread",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/addon/ops.py"
+        }
+      ]
+    },
+    {
+      "id": "step4",
+      "lane": "agent",
+      "col": 4,
+      "type": "frontend",
+      "label": "Look and fix",
+      "sublabel": "contact sheet back",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/images.py"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge0",
+      "from": "step0",
+      "to": "step1"
+    },
+    {
+      "id": "edge1",
+      "from": "step1",
+      "to": "step2"
+    },
+    {
+      "id": "edge2",
+      "from": "step2",
+      "to": "step3"
+    },
+    {
+      "id": "edge3",
+      "from": "step3",
+      "to": "step4"
+    }
+  ]
+}

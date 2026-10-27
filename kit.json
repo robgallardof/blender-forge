@@ -1,0 +1,366 @@
+{
+  "version": 1,
+  "theme": "ember",
+  "assets": "assets/readme-builder/kit",
+  "documents": {
+    "README.md": "en",
+    "README.es.md": "es"
+  },
+  "blocks": [
+    {
+      "id": "hero",
+      "type": "heading",
+      "number": "01",
+      "icon": "box",
+      "kicker": {
+        "en": "MCP for Blender",
+        "es": "MCP para Blender"
+      },
+      "title": {
+        "en": "blender-forge",
+        "es": "blender-forge"
+      }
+    },
+    {
+      "id": "nav",
+      "type": "buttons",
+      "items": [
+        {
+          "label": {
+            "en": "Quick start",
+            "es": "Inicio rápido"
+          },
+          "href": {
+            "en": "#-quick-start",
+            "es": "#-inicio-rápido"
+          },
+          "icon": "rocket",
+          "variant": "primary"
+        },
+        {
+          "label": {
+            "en": "Agent setup",
+            "es": "Instalar en agentes"
+          },
+          "href": {
+            "en": "#-agent-setup-removal-and-compatibility",
+            "es": "#-instalación-retirada-y-compatibilidad"
+          },
+          "icon": "bot",
+          "small": true
+        },
+        {
+          "label": {
+            "en": "Tools",
+            "es": "Herramientas"
+          },
+          "href": {
+            "en": "#-tools",
+            "es": "#-herramientas"
+          },
+          "icon": "terminal",
+          "small": true
+        },
+        {
+          "label": {
+            "en": "How it works",
+            "es": "Cómo funciona"
+          },
+          "href": {
+            "en": "#-how-it-works",
+            "es": "#-cómo-funciona"
+          },
+          "icon": "layers",
+          "small": true
+        },
+        {
+          "label": {
+            "en": "Español",
+            "es": "English"
+          },
+          "href": {
+            "en": "README.es.md",
+            "es": "README.md"
+          },
+          "icon": "globe",
+          "small": true
+        }
+      ]
+    },
+    {
+      "id": "facts",
+      "type": "stats",
+      "items": [
+        {
+          "value": "37",
+          "label": {
+            "en": "MCP tools",
+            "es": "herramientas MCP"
+          }
+        },
+        {
+          "value": "5.2.3",
+          "label": {
+            "en": "Blender tested",
+            "es": "Blender probado"
+          }
+        },
+        {
+          "value": "HMAC",
+          "label": {
+            "en": "signed bridge",
+            "es": "bridge firmado"
+          }
+        },
+        {
+          "value": "CC0",
+          "label": {
+            "en": "Poly Haven assets",
+            "es": "assets de Poly Haven"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "type": "cards",
+      "items": [
+        {
+          "title": {
+            "en": "Build by intent",
+            "es": "Construye con intención"
+          },
+          "icon": "target",
+          "kicker": {
+            "en": "Modeling",
+            "es": "Modelado"
+          },
+          "href": {
+            "en": "#-tools",
+            "es": "#-herramientas"
+          },
+          "tags": [
+            "build_scene",
+            "create_mesh"
+          ],
+          "text": {
+            "en": "Describe a whole scene as one spec, or go piece by piece: primitives, raw meshes, 16 modifiers, materials and lights.",
+            "es": "Describe toda una escena en un spec o ve pieza por pieza: primitivas, mallas propias, 16 modificadores, materiales y luces."
+          }
+        },
+        {
+          "title": {
+            "en": "Looks before it is done",
+            "es": "Revisa antes de terminar"
+          },
+          "icon": "search",
+          "kicker": {
+            "en": "Review",
+            "es": "Revisión"
+          },
+          "href": {
+            "en": "#-how-it-works",
+            "es": "#-cómo-funciona"
+          },
+          "tags": [
+            "look",
+            "render_still"
+          ],
+          "text": {
+            "en": "look renders front, side, top and iso views into one image the agent can see, then render_still shows the final shot.",
+            "es": "look renderiza vistas de frente, lado, arriba e iso en una imagen que el agente ve, y render_still muestra la toma final."
+          }
+        },
+        {
+          "title": {
+            "en": "Safe by default",
+            "es": "Seguro por defecto"
+          },
+          "icon": "shield",
+          "kicker": {
+            "en": "Bridge",
+            "es": "Bridge"
+          },
+          "href": {
+            "en": "#-how-it-works",
+            "es": "#-cómo-funciona"
+          },
+          "text": {
+            "en": "Signed requests on 127.0.0.1 only. Deleting or starting over asks first, saves never overwrite, and Python is off.",
+            "es": "Peticiones firmadas solo en 127.0.0.1. Borrar o empezar de cero pide confirmación, no sobrescribe y Python está apagado."
+          }
+        },
+        {
+          "title": {
+            "en": "Any agent, any output",
+            "es": "Cualquier agente y formato"
+          },
+          "icon": "bot",
+          "kicker": "MCP",
+          "href": {
+            "en": "#-agent-setup-removal-and-compatibility",
+            "es": "#-instalación-retirada-y-compatibilidad"
+          },
+          "tags": [
+            "glb",
+            "fbx",
+            "usd",
+            "stl"
+          ],
+          "text": {
+            "en": "Claude Code, Codex, OpenCode and more. Exports glTF, FBX, OBJ, STL, PLY and USD; renders stills and MP4.",
+            "es": "Claude Code, Codex, OpenCode y más. Exporta glTF, FBX, OBJ, STL, PLY y USD; renderiza imágenes y MP4."
+          }
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "type": "panels",
+      "style": "chips",
+      "columns": 2,
+      "groups": [
+        {
+          "title": {
+            "en": "Session",
+            "es": "Sesión"
+          },
+          "icon": "settings",
+          "items": [
+            "forge_status",
+            "start_headless",
+            "stop_headless",
+            "scene_info",
+            "object_info",
+            "new_scene"
+          ]
+        },
+        {
+          "title": {
+            "en": "Modeling",
+            "es": "Modelado"
+          },
+          "icon": "box",
+          "items": [
+            "create_object",
+            "create_mesh",
+            "transform",
+            "duplicate",
+            "delete",
+            "parent",
+            "join",
+            "add_modifier",
+            "apply_modifiers",
+            "shade"
+          ]
+        },
+        {
+          "title": {
+            "en": "Look",
+            "es": "Apariencia"
+          },
+          "icon": "palette",
+          "items": [
+            "material",
+            "assign_material",
+            "add_light",
+            "light_rig",
+            "add_camera",
+            "frame_camera",
+            "world"
+          ]
+        },
+        {
+          "title": {
+            "en": "Render and animate",
+            "es": "Render y animación"
+          },
+          "icon": "play",
+          "items": [
+            "render_settings",
+            "render_still",
+            "look",
+            "keyframe",
+            "turntable",
+            "render_animation"
+          ]
+        },
+        {
+          "title": {
+            "en": "Files and assets",
+            "es": "Archivos y assets"
+          },
+          "icon": "download",
+          "items": [
+            "import_file",
+            "export_file",
+            "save",
+            "open_file",
+            "search_assets",
+            "import_asset"
+          ]
+        },
+        {
+          "title": {
+            "en": "Intent and escape hatch",
+            "es": "Intención y salida"
+          },
+          "icon": "spark",
+          "items": [
+            "build_scene",
+            "run_python (opt-in)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "links",
+      "type": "buttons",
+      "items": [
+        {
+          "label": {
+            "en": "Example spec",
+            "es": "Spec de ejemplo"
+          },
+          "href": "examples/desk.json",
+          "icon": "file",
+          "variant": "primary",
+          "trailing": true
+        },
+        {
+          "label": {
+            "en": "Skills",
+            "es": "Skills"
+          },
+          "href": ".agents/skills",
+          "icon": "book",
+          "small": true
+        },
+        {
+          "label": {
+            "en": "Agent rules",
+            "es": "Reglas para agentes"
+          },
+          "href": "AGENTS.md",
+          "icon": "bot",
+          "small": true
+        }
+      ]
+    },
+    {
+      "id": "top",
+      "type": "buttons",
+      "items": [
+        {
+          "label": {
+            "en": "Back to top",
+            "es": "Volver arriba"
+          },
+          "href": "#top",
+          "icon": "arrow-up",
+          "small": true
+        }
+      ]
+    }
+  ]
+}

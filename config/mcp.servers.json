@@ -1,0 +1,11 @@
+{
+  "$comment": "Single source of truth for this workspace's MCP servers. scripts/install-mcp.py reads it.",
+  "servers": {
+    "blender-forge": {
+      "description": "Model, light, render, animate and export in Blender, with visual review",
+      "command": "uv",
+      "args": ["run", "--quiet", "--directory", "{ROOT}/mcp/blender-forge", "blender-forge"],
+      "env": {}
+    }
+  }
+}

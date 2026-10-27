@@ -1,0 +1,17 @@
+schema_version = "1.0.0"
+
+id = "blender_forge_bridge"
+version = "0.1.0"
+name = "blender-forge bridge"
+tagline = "Model, light, render and export from an MCP agent"
+maintainer = "Roberto Gallardo"
+type = "add-on"
+website = "https://github.com/robgallardof/blender-forge"
+tags = ["Pipeline", "Modeling", "Render"]
+
+blender_version_min = "4.2.0"
+license = ["SPDX:MIT"]
+
+[permissions]
+network = "Listens on 127.0.0.1 for the local blender-forge server"
+files = "Imports, exports, renders and saves the requested paths"

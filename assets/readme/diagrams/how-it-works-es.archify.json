@@ -1,0 +1,120 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Cómo blender-forge maneja Blender",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/robgallardof/blender-forge.git",
+      "revision": "50e17dc5df50de0f574b11c62d38997fd0a8e7ca"
+    },
+    "output": ".archify/how-it-works-es-20261027-174704/diagram.html"
+  },
+  "lanes": [
+    {
+      "id": "agent",
+      "label": "Tu agente"
+    },
+    {
+      "id": "local",
+      "label": "Tu equipo"
+    }
+  ],
+  "mainPath": [
+    "step0",
+    "step1",
+    "step2",
+    "step3",
+    "step4"
+  ],
+  "nodes": [
+    {
+      "id": "step0",
+      "lane": "agent",
+      "col": 0,
+      "type": "frontend",
+      "label": "Pedir una escena",
+      "sublabel": "build_scene o herramientas",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/server.py"
+        }
+      ]
+    },
+    {
+      "id": "step1",
+      "lane": "local",
+      "col": 1,
+      "type": "backend",
+      "label": "Validar",
+      "sublabel": "spec revisado antes",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/spec.py"
+        }
+      ]
+    },
+    {
+      "id": "step2",
+      "lane": "local",
+      "col": 2,
+      "type": "backend",
+      "label": "Bridge firmado",
+      "sublabel": "HMAC, solo 127.0.0.1",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/addon/bridge.py"
+        }
+      ]
+    },
+    {
+      "id": "step3",
+      "lane": "local",
+      "col": 3,
+      "type": "backend",
+      "label": "Blender lo construye",
+      "sublabel": "hilo principal",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/addon/ops.py"
+        }
+      ]
+    },
+    {
+      "id": "step4",
+      "lane": "agent",
+      "col": 4,
+      "type": "frontend",
+      "label": "Revisar y corregir",
+      "sublabel": "regresa la hoja",
+      "sources": [
+        {
+          "path": "mcp/blender-forge/src/blender_forge/images.py"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge0",
+      "from": "step0",
+      "to": "step1"
+    },
+    {
+      "id": "edge1",
+      "from": "step1",
+      "to": "step2"
+    },
+    {
+      "id": "edge2",
+      "from": "step2",
+      "to": "step3"
+    },
+    {
+      "id": "edge3",
+      "from": "step3",
+      "to": "step4"
+    }
+  ]
+}

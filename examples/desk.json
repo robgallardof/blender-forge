@@ -1,0 +1,213 @@
+{
+  "materials": [
+    {
+      "name": "Wood",
+      "base_color": "#8a5a3b",
+      "roughness": 0.55
+    },
+    {
+      "name": "Metal",
+      "base_color": "#2b2f36",
+      "metallic": 1,
+      "roughness": 0.35
+    },
+    {
+      "name": "Glow",
+      "emission_color": "#ffd27a",
+      "emission_strength": 12
+    },
+    {
+      "name": "Floor",
+      "base_color": "#d9d4cc",
+      "roughness": 0.9
+    }
+  ],
+  "objects": [
+    {
+      "kind": "plane",
+      "name": "Ground",
+      "size": 8,
+      "material": "Floor"
+    },
+    {
+      "kind": "cube",
+      "name": "Desk",
+      "scale": [
+        0.8,
+        0.4,
+        0.025
+      ],
+      "location": [
+        0,
+        0,
+        0.75
+      ],
+      "material": "Wood",
+      "modifiers": [
+        {
+          "type": "bevel",
+          "settings": {
+            "width": 0.01,
+            "segments": 3
+          }
+        }
+      ]
+    },
+    {
+      "kind": "cylinder",
+      "name": "LegFL",
+      "radius": 0.025,
+      "depth": 0.74,
+      "location": [
+        0.72,
+        -0.32,
+        0.37
+      ],
+      "material": "Metal"
+    },
+    {
+      "kind": "cylinder",
+      "name": "LegFR",
+      "radius": 0.025,
+      "depth": 0.74,
+      "location": [
+        -0.72,
+        -0.32,
+        0.37
+      ],
+      "material": "Metal"
+    },
+    {
+      "kind": "cylinder",
+      "name": "LegBL",
+      "radius": 0.025,
+      "depth": 0.74,
+      "location": [
+        0.72,
+        0.32,
+        0.37
+      ],
+      "material": "Metal"
+    },
+    {
+      "kind": "cylinder",
+      "name": "LegBR",
+      "radius": 0.025,
+      "depth": 0.74,
+      "location": [
+        -0.72,
+        0.32,
+        0.37
+      ],
+      "material": "Metal"
+    },
+    {
+      "kind": "cylinder",
+      "name": "LampBase",
+      "radius": 0.08,
+      "depth": 0.02,
+      "location": [
+        0.5,
+        0.15,
+        0.785
+      ],
+      "material": "Metal"
+    },
+    {
+      "kind": "cylinder",
+      "name": "LampArm",
+      "radius": 0.012,
+      "depth": 0.35,
+      "location": [
+        0.5,
+        0.15,
+        0.96
+      ],
+      "material": "Metal"
+    },
+    {
+      "kind": "cone",
+      "name": "LampShade",
+      "radius": 0.1,
+      "depth": 0.12,
+      "location": [
+        0.5,
+        0.15,
+        1.14
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "material": "Metal"
+    },
+    {
+      "kind": "uv_sphere",
+      "name": "Bulb",
+      "radius": 0.035,
+      "location": [
+        0.5,
+        0.15,
+        1.11
+      ],
+      "material": "Glow",
+      "smooth": true
+    },
+    {
+      "kind": "monkey",
+      "name": "Suzanne",
+      "size": 0.3,
+      "location": [
+        -0.35,
+        0,
+        0.92
+      ],
+      "rotation": [
+        0,
+        0,
+        20
+      ],
+      "material": "Wood",
+      "smooth": true,
+      "modifiers": [
+        {
+          "type": "subdivision",
+          "settings": {
+            "levels": 2,
+            "render_levels": 2
+          }
+        }
+      ]
+    }
+  ],
+  "lights": [
+    {
+      "kind": "rig",
+      "target": "Desk",
+      "distance": 4,
+      "energy": 400
+    }
+  ],
+  "camera": {
+    "look_at": "Desk",
+    "objects": [
+      "Desk",
+      "LampShade",
+      "Suzanne",
+      "LegFL",
+      "LegBR"
+    ]
+  },
+  "world": {
+    "color": "#20242e",
+    "strength": 0.4
+  },
+  "render": {
+    "engine": "eevee",
+    "resolution": [
+      960,
+      540
+    ]
+  }
+}
