@@ -7,9 +7,9 @@
     "quality_profile": "showcase",
     "repository": {
       "url": "https://github.com/robgallardof/blender-forge.git",
-      "revision": "50e17dc5df50de0f574b11c62d38997fd0a8e7ca"
+      "revision": "652af0e08a05fdaed5bd03ff8ae0e354f99e8c18"
     },
-    "output": ".archify/how-it-works-es-20261027-174704/diagram.html"
+    "output": ".archify/how-it-works-es-20261027-175056/diagram.html"
   },
   "lanes": [
     {
