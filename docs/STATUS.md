@@ -17,5 +17,9 @@ What exists and how it was checked. Unrun items are marked NOT EXECUTED.
   render), a forged request rejected by the real bridge, and the extension built, installed, enabled,
   pinged and removed with Blender's `extension` CLI in an isolated user folder.
 - EXECUTED: `pytest -m network`: Poly Haven search, model import with credit, HDRI as world.
-- NOT EXECUTED: the bridge inside an interactive Blender window (the GUI timer path); macOS and Linux until
-  CI runs; Eevee/Workbench rendering on a headless Linux runner; model inference inside agent hosts.
+- EXECUTED: the installed extension inside an interactive Blender 5.2.3 window (GUI timer path):
+  forge_status reported background=false and create_object added a mesh to the open scene.
+- EXECUTED in CI (run 40604942500): unit tests on Windows, macOS and Linux; the full Blender suite on
+  Linux with the checksum-verified 5.2.3 tarball, including Workbench renders on a headless runner.
+- NOT EXECUTED: Eevee and Cycles renders on Linux/macOS (tested on Windows only); model inference
+  inside agent hosts.
