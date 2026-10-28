@@ -1,0 +1,7 @@
+# Allowlist: only the MCP code enters the build context (no renders, .blend files or caches).
+**
+!mcp/blender-forge/pyproject.toml
+!mcp/blender-forge/uv.lock
+!mcp/blender-forge/src/
+!mcp/blender-forge/src/**
+mcp/blender-forge/src/**/__pycache__

@@ -50,3 +50,24 @@ jobs:
           echo "BLENDER_FORGE_BLENDER=$RUNNER_TEMP/${name}/blender" >> "$GITHUB_ENV"
       - run: uv sync --locked
       - run: uv run pytest -q -m "not network"
+
+  # The optional image against a real headless Blender on the runner (stdio and compose over HTTP).
+  docker:
+    runs-on: ubuntu-latest
+    env:
+      BLENDER_VERSION: "5.2.3"
+      BLENDER_SHA256: "78486c018b4443efe5e75ab54c290ed8c15abafd249b862c2c9ce2530a918eec"
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Blender ${{ env.BLENDER_VERSION }} LTS (checksum verified)
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libegl1 libgl1 libxkbcommon0 libsm6 libxi6 libxrender1 libxxf86vm1 libxfixes3 libgl1-mesa-dri
+          cd "$RUNNER_TEMP"
+          name="blender-${BLENDER_VERSION}-linux-x64"
+          curl -sSfL -o blender.tar.xz "https://download.blender.org/release/Blender${BLENDER_VERSION%.*}/${name}.tar.xz"
+          echo "${BLENDER_SHA256}  blender.tar.xz" | sha256sum -c -
+          tar -xJf blender.tar.xz
+          echo "BLENDER_FORGE_BLENDER=$RUNNER_TEMP/${name}/blender" >> "$GITHUB_ENV"
+      - run: python3 scripts/test_docker.py

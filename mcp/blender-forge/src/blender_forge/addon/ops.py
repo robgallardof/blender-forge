@@ -664,7 +664,11 @@ def look(args):
     bad = [v for v in views if v not in VIEWS]
     if bad:
         raise OpError(f"unknown views {bad}; use {sorted(VIEWS)}")
-    out_dir = Path(tempfile.mkdtemp(prefix="blender-forge-look-"))
+    if args.get("out_dir"):
+        out_dir = safe_path(args["out_dir"], "out_dir")
+        out_dir.mkdir(parents=True, exist_ok=True)
+    else:
+        out_dir = Path(tempfile.mkdtemp(prefix="blender-forge-look-"))
     saved = (r.engine, r.resolution_x, r.resolution_y, r.resolution_percentage, scene.camera, r.filepath,
              r.image_settings.file_format, r.film_transparent)
     data = bpy.data.cameras.new("ForgeLook")

@@ -21,5 +21,10 @@ What exists and how it was checked. Unrun items are marked NOT EXECUTED.
   forge_status reported background=false and create_object added a mesh to the open scene.
 - EXECUTED in CI (run 40604942500): unit tests on Windows, macOS and Linux; the full Blender suite on
   Linux with the checksum-verified 5.2.3 tarball, including Workbench renders on a headless runner.
+- EXECUTED: Docker (optional image): `python scripts/test_docker.py` on Windows 11 with Docker Desktop 29.8
+  against a real headless Blender 5.2.3: stdio handshake, skills from /workspace, status, a model, a render
+  and a .glb export landing in the mounted host folder, compose over HTTP with a token. CI runs it on Linux.
+- Registered with `scripts/install-mcp.py --with-skills` in the clients detected on this PC: Claude Code
+  (`claude mcp list`: connected), Codex and VS Code.
 - NOT EXECUTED: Eevee and Cycles renders on Linux/macOS (tested on Windows only); model inference
   inside agent hosts.

@@ -32,6 +32,9 @@ MCP: Claude Code, Codex, OpenCode, DeepSeek Harness, Cursor, Gemini CLI, VS Code
   (every operation, renders, exports) and the extension install into an isolated Blender user folder.
   Blender is found automatically or through `BLENDER_FORGE_BLENDER`. Poly Haven tests: `-m network`.
 - Own implementation only: do not copy code from other Blender MCP servers.
+- Docker (optional): `Dockerfile` + `compose.yaml` (+ `compose.linux.yaml`); the container is only the MCP server
+  and reaches the host bridge through `BLENDER_FORGE_BRIDGE_HOST`, translating paths with `BLENDER_FORGE_PATH_MAP`.
+  Real test against a headless Blender: `python scripts/test_docker.py`. Details: [docs/DOCKER.md](docs/DOCKER.md).
 - Docs in English and Spanish (`README.md`, `README.es.md`).
 
 ## Commit language

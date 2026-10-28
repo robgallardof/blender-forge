@@ -1,0 +1,43 @@
+# blender-forge over Streamable HTTP with a bearer token. stdio needs no compose (docs/DOCKER.md).
+# Blender runs on the host with the extension enabled (or headless: blender -b --python serve.py).
+#   BLENDER_FORGE_MCP_TOKEN=<token> FORGE_WORK=C:/Users/me/3d docker compose up -d --build --wait
+services:
+  blender-forge:
+    build:
+      context: .
+    image: blender-forge:local
+    user: ${BLENDER_FORGE_USER:-10001:10001}
+    init: true
+    command: ["--http", "--listen", "0.0.0.0:8080"]
+    environment:
+      BLENDER_FORGE_MCP_TOKEN: ${BLENDER_FORGE_MCP_TOKEN:?Set BLENDER_FORGE_MCP_TOKEN to a random token of at least 32 characters}
+      BLENDER_FORGE_BRIDGE_HOST: ${BLENDER_FORGE_BRIDGE_HOST:-host.docker.internal}
+      BLENDER_FORGE_PATH_MAP: /work=${FORGE_WORK:?Set FORGE_WORK to the host folder Blender reads and writes (e.g. C:/Users/me/3d)}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${BLENDER_FORGE_BIND_ADDRESS:-127.0.0.1}:${BLENDER_FORGE_PORT:-8080}:8080"
+    volumes:
+      - type: bind
+        source: ${FORGE_WORK}
+        target: /work
+      - type: bind
+        source: ${BLENDER_FORGE_CONFIG_FILE:-~/.config/blender-forge/bridge.json}
+        target: /config/bridge.json
+        read_only: true
+      - type: bind
+        source: ${BLENDER_FORGE_WORKSPACE:-.}
+        target: /workspace
+        read_only: true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=512m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3

@@ -328,6 +328,12 @@
           "trailing": true
         },
         {
+          "label": "Docker",
+          "href": "docs/DOCKER.md",
+          "icon": "box",
+          "small": true
+        },
+        {
           "label": {
             "en": "Skills",
             "es": "Skills"

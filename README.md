@@ -84,6 +84,19 @@ uv run blender-forge-install --check                  # extension, token and bri
 uv run blender-forge-install --remove                 # uninstall the Blender extension
 ```
 
+### Docker (optional)
+
+The container runs only the MCP server; Blender stays on your machine with its loopback bridge. Mount your
+work folder at `/work` and the server translates paths both ways, so renders and exports land in it.
+
+```sh
+docker build -t blender-forge:local .
+export BLENDER_FORGE_MCP_TOKEN="$(python -c 'import secrets; print(secrets.token_hex(32))')"
+FORGE_WORK=C:/Users/me/3d docker compose up -d --build --wait      # HTTP on 127.0.0.1:8080/mcp with a token
+```
+
+stdio setup for MCP clients, Linux networking and every variable: [docs/DOCKER.md](docs/DOCKER.md).
+
 **What was tested:** a real MCP stdio client lists the tools, resources and prompts; the extension is
 built, installed and enabled with Blender's own `extension` CLI in an isolated user folder and its bridge
 answers; every operation runs against a real headless Blender 5.2.3. Model inference inside each agent is
@@ -104,8 +117,9 @@ do not cover and stays off unless you install with `--allow-python`.
 
 <!-- kit:links -->
 <p align="center"><a href="examples/desk.json"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme-builder/kit/links-en-01-dark.svg" /><img src="assets/readme-builder/kit/links-en-01-light.svg" alt="Example spec" height="44" /></picture></a>&nbsp;
-<a href=".agents/skills"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme-builder/kit/links-en-02-dark.svg" /><img src="assets/readme-builder/kit/links-en-02-light.svg" alt="Skills" height="34" /></picture></a>&nbsp;
-<a href="AGENTS.md"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme-builder/kit/links-en-03-dark.svg" /><img src="assets/readme-builder/kit/links-en-03-light.svg" alt="Agent rules" height="34" /></picture></a></p>
+<a href="docs/DOCKER.md"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme-builder/kit/links-en-02-dark.svg" /><img src="assets/readme-builder/kit/links-en-02-light.svg" alt="Docker" height="34" /></picture></a>&nbsp;
+<a href=".agents/skills"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme-builder/kit/links-en-03-dark.svg" /><img src="assets/readme-builder/kit/links-en-03-light.svg" alt="Skills" height="34" /></picture></a>&nbsp;
+<a href="AGENTS.md"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/readme-builder/kit/links-en-04-dark.svg" /><img src="assets/readme-builder/kit/links-en-04-light.svg" alt="Agent rules" height="34" /></picture></a></p>
 <!-- /kit:links -->
 
 <p align="center"><img src="assets/readme-builder/kit/wave.svg" alt="" width="100%" /></p>

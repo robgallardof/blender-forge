@@ -7,6 +7,7 @@ import functools
 import json
 import os
 import tempfile
+import time
 from pathlib import Path
 from typing import Any, Literal
 
@@ -51,6 +52,11 @@ def call(operation, **arguments):
 
 
 Vec = list[float]
+
+
+def _look_dir():
+    """With Docker, renders must land in the shared folder; natively Blender picks a temp dir."""
+    return client.paths.scratch("looks", str(int(time.time() * 1000))) if client.paths else None
 
 
 # ------------------------------------------------------------------ session
@@ -279,6 +285,8 @@ def render_settings(engine: Literal["eevee", "cycles", "workbench"] | None = Non
 @guarded
 def render_still(path: str | None = None, camera: str | None = None, frame: int | None = None):
     """Render the scene camera to a PNG and return it so you can check the result."""
+    if path is None and client.paths:
+        path = f"{client.paths.scratch('renders')}/render-{int(time.time() * 1000)}.png"
     result = call("render_still", path=path, camera=camera, frame=frame)
     return [json.dumps(result), Image(path=str(images.preview(result["path"])))]
 
@@ -290,7 +298,7 @@ def look(views: list[Literal["front", "back", "left", "right", "top", "iso", "is
          size: int = 384):
     """Look at the scene from several angles (temporary camera, scene left unchanged) and get one contact
     sheet image. Use it after every meaningful change; workbench is fast, eevee/cycles show materials."""
-    result = call("look", views=views, objects=objects, engine=engine, size=size)
+    result = call("look", views=views, objects=objects, engine=engine, size=size, out_dir=_look_dir())
     sheet = images.contact_sheet(result["views"], Path(result["views"][0]["path"]).with_name("sheet.png"), cell=size)
     return [json.dumps({"views": [v["view"] for v in result["views"]], "sheet": str(sheet)}), Image(path=str(sheet))]
 
@@ -421,7 +429,7 @@ def build_scene(spec: dict[str, Any], review: bool = True):
     created = _run_spec(steps)
     if not review:
         return created
-    result = call("look", objects=created["objects"] or None, engine="workbench", size=384)
+    result = call("look", objects=created["objects"] or None, engine="workbench", size=384, out_dir=_look_dir())
     sheet = images.contact_sheet(result["views"], Path(result["views"][0]["path"]).with_name("sheet.png"))
     return [json.dumps(created), Image(path=str(sheet))]
 
@@ -460,9 +468,26 @@ def _register_playbooks():
 _register_playbooks()
 
 
-def main():
-    transport = os.environ.get("BLENDER_FORGE_TRANSPORT", "stdio")
-    mcp.run(transport=transport)
+TOKEN_ENV = "BLENDER_FORGE_MCP_TOKEN"
+
+
+def main(argv=None):
+    import argparse
+
+    from . import http_transport
+
+    parser = argparse.ArgumentParser(prog="blender-forge", description="blender-forge MCP server")
+    http_transport.add_arguments(parser)
+    args = parser.parse_args(argv)
+    if args.http:
+        try:
+            http_transport.read_token(TOKEN_ENV)
+            http_transport.parse_listen(args.listen)
+        except http_transport.HttpConfigError as error:
+            parser.error(str(error))
+        http_transport.serve(mcp, args.listen, args.allow_host, TOKEN_ENV)
+    else:
+        mcp.run(transport="stdio")
 
 
 if __name__ == "__main__":

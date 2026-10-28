@@ -29,10 +29,81 @@ NOT_RUNNING = ("Open Blender with the blender-forge extension enabled (it listen
                "or call start_headless to run Blender in the background.")
 
 
+class PathMap:
+    """Container <-> host path prefixes for Docker, from BLENDER_FORGE_PATH_MAP="/work=C:/Users/me/3d;...".
+
+    Blender runs on the host, so every path sent to it is rewritten to the host form, and every path in
+    its replies is rewritten back so the server (in the container) can read renders and exports.
+    """
+
+    def __init__(self, pairs=()):
+        self.pairs = [(c.rstrip("/"), h.rstrip("/\\")) for c, h in pairs]
+
+    @classmethod
+    def from_env(cls):
+        raw = os.environ.get("BLENDER_FORGE_PATH_MAP", "")
+        pairs = []
+        for item in filter(None, (p.strip() for p in raw.split(";"))):
+            container, sep, host = item.partition("=")
+            if not sep or not container.startswith("/") or not host:
+                raise ForgeError(f"BLENDER_FORGE_PATH_MAP entry {item!r} must look like /work=C:/host/folder",
+                                 "BAD_PATH_MAP")
+            pairs.append((container, host))
+        return cls(pairs)
+
+    def __bool__(self):
+        return bool(self.pairs)
+
+    @staticmethod
+    def _swap(value, src, dst, sep):
+        norm = value.replace("\\", "/")
+        src_n = src.replace("\\", "/")
+        if norm == src_n or norm.lower().startswith(src_n.lower() + "/"):
+            rest = norm[len(src_n):].lstrip("/")
+            return dst + (sep + rest.replace("/", sep) if rest else "")
+        return None
+
+    def _walk(self, value, direction):
+        if isinstance(value, dict):
+            return {k: self._walk(v, direction) for k, v in value.items()}
+        if isinstance(value, list):
+            return [self._walk(v, direction) for v in value]
+        if isinstance(value, str):
+            for container, host in self.pairs:
+                if direction == "host":
+                    sep = "\\" if ":" in host[:3] else "/"
+                    hit = self._swap(value, container, host, sep)
+                else:
+                    hit = self._swap(value, host, container, "/")
+                if hit is not None:
+                    return hit
+        return value
+
+    def to_host(self, value):
+        return self._walk(value, "host") if self.pairs else value
+
+    def to_container(self, value):
+        return self._walk(value, "container") if self.pairs else value
+
+    def scratch(self, *parts):
+        """A folder Blender (host) and the server (container) both see; None without a map."""
+        if not self.pairs:
+            return None
+        path = Path(self.pairs[0][0], ".blender-forge", *parts)
+        path.mkdir(parents=True, exist_ok=True)
+        return str(path).replace("\\", "/")
+
+
+def bridge_host():
+    """The bridge binds to the host loopback; from Docker Desktop that is host.docker.internal."""
+    return os.environ.get("BLENDER_FORGE_BRIDGE_HOST") or "127.0.0.1"
+
+
 class Client:
-    def __init__(self, config=None, timeout=None):
+    def __init__(self, config=None, timeout=None, paths=None):
         self._config = config
         self.timeout = timeout or float(os.environ.get("BLENDER_FORGE_TIMEOUT", 600))
+        self.paths = paths if paths is not None else PathMap.from_env()
 
     @property
     def config(self):
@@ -44,12 +115,12 @@ class Client:
         return self._config
 
     def call(self, operation, arguments=None, timeout=None):
-        message = protocol.new_request(self.config["token"], operation, arguments or {})
+        message = protocol.new_request(self.config["token"], operation, self.paths.to_host(arguments or {}))
         raw = (json.dumps(message, allow_nan=False) + "\n").encode("utf-8")
         if len(raw) > protocol.MAX_BYTES:
             raise ForgeError("request too large", "REQUEST_TOO_LARGE")
         try:
-            with socket.create_connection(("127.0.0.1", int(self.config["port"])), timeout=5) as conn:
+            with socket.create_connection((bridge_host(), int(self.config["port"])), timeout=5) as conn:
                 conn.settimeout(timeout or self.timeout)
                 conn.sendall(raw)
                 line = conn.makefile("rb").readline(protocol.MAX_BYTES + 1)
@@ -65,7 +136,7 @@ class Client:
         if not reply.get("ok"):
             err = reply.get("error") or {}
             raise ForgeError(err.get("message", "bridge refused the request"), err.get("code", "BRIDGE_REFUSED"))
-        return reply.get("result")
+        return self.paths.to_container(reply.get("result"))
 
     def reachable(self):
         try:
